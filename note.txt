@@ -1,0 +1,40 @@
+use backend:
+bcryptjs
+cookie-parser
+cloudinary
+cors
+dotenv
+express
+jsonwebtoken
+moongose
+multer
+npm
+nodemon
+
+il progetto sarà diciso in due sezioni:
+client
+server
+
+partiamo col sviluppare la parte server:
+ci posizioniamo sulla cartella di interesse e lanciamo il comando
+
+npm init -y
+
+usiamo questo comando per inizzializzare il nostro progetto
+una volta concluso andiamo a installare tutte le librerie utili
+
+npm i bcryptjs cloudinary cookie-parser cors dotenv express jsonwebtoken mongoose multer nodemon
+
+GITIGNORE
+una volta installate le dipendenze utili andrò ad escludere tutto
+cio che non voglio pushare su git hub. lo facci otrmite il file .gitignore
+inizialmente lo imposteremo in questo modo
+
+# ignore dependeci
+node_modules/
+
+# ignore file
+.env
+
+ENTRY POINT server.js
+vado a creare nella cartella server il file server.js
