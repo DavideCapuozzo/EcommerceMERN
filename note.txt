@@ -21,6 +21,9 @@ il progetto sarà diciso in due sezioni:
 client
 server
 
+----------------------------------------------------------------------------------------------------------------------------------------------
+################################### SERVER GUIDE ##########################################################################
+
 partiamo col sviluppare la parte server:
 ci posizioniamo sulla cartella di interesse e lanciamo il comando
 
@@ -85,8 +88,9 @@ app.use(cookieParser);
 app.use(express.json());
 
 app.listen(PORT, ()=> console.log(`Server is now running on port ${PORT}`))
------------------------------------------------------------------
 
+----------------------------------------------------------------------------------------------------------------------------------------------
+################################### CLIENT GUIDE ##########################################################################
 
 CLIENT folder
 nel frattempo creo la cartella client dove andrò ad installare react con vite
@@ -97,3 +101,11 @@ npm i @reduxjs/toolkit react-redux axios react-router-dom
 
 npm install tailwindcss postcss autoprefixer
 npx tailwindcss init -p
+
+installiamo la libreria dei COMPONENTI
+npx shadcn@latest init
+
+testiamo l'installazione di un componente
+npx shadcn@latest add button
+-------------------------------------------------------------------------------------------------------------------------------------------
+
