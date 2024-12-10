@@ -63,6 +63,13 @@ const app = express();
 app.use(cors({
     origin: 'http://localhost:3000', // Consenti richieste solo da questo dominio
     methods: ['GET', 'POST'], // Permetti solo questi metodi
+    allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Cache-Control",
+    "Expires",
+    "Pragma"
+    ],
     credentials: true // Consenti credenziali
 }));
 
