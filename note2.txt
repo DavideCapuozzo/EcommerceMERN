@@ -1,0 +1,77 @@
+###################################################################
+######################## APPROFONDIMENTI ##########################
+------------------------------------------------------------------
+
+Riassunto: cookie-parser
+
+Il modulo cookie-parser è un middleware per Express che semplifica la gestione dei cookie. Permette di:
+
+Leggere i cookie:
+
+I cookie inviati dal client vengono analizzati e resi accessibili tramite req.cookies come oggetto JavaScript.
+
+Gestire cookie firmati:
+
+Verifica l’integrità dei cookie utilizzando una chiave segreta, rendendo i cookie disponibili in req.signedCookies.
+
+Impostare nuovi cookie:
+
+Utilizzando res.cookie(), puoi creare cookie con opzioni come durata (maxAge), accesso limitato al server (httpOnly), e sicurezza (secure).
+
+Esempio base:
+
+const express = require('express');
+const cookieParser = require('cookie-parser');
+
+const app = express();
+app.use(cookieParser('secret_key'));
+
+app.get('/', (req, res) => {
+    console.log(req.cookies); // Legge i cookie
+    res.cookie('user', 'John Doe', { signed: true }); // Imposta un cookie firmato
+    res.send('Cookie impostato!');
+});
+
+app.listen(3000);
+
+Usato per autenticazione, personalizzazione o tracciamento, è utile ma non adatto a memorizzare dati sensibili senza cifratura.
+
+----------------------------------------------------------------------
+
+Riassunto: cors
+
+Il modulo cors è un middleware per configurare il Cross-Origin Resource Sharing (CORS), che consente richieste da domini diversi. Permette di:
+
+Specificare i domini consentiti:
+
+Configura quali origini possono accedere alle risorse del server (origin).
+
+Definire metodi e intestazioni consentiti:
+
+Personalizza metodi HTTP (GET, POST, ecc.) e intestazioni accessibili (allowedHeaders).
+
+Permettere credenziali:
+
+Consente di inviare cookie o token con credentials: true.
+
+Configurazione base:
+
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000', // Consenti richieste solo da questo dominio
+    methods: ['GET', 'POST'], // Permetti solo questi metodi
+    credentials: true // Consenti credenziali
+}));
+
+app.get('/data', (req, res) => {
+    res.json({ message: 'CORS configurato!' });
+});
+
+app.listen(5000);
+
+Usato per SPA, microservizi o backend separati, cors aggiunge le intestazioni necessarie per consentire richieste cross-origin in modo sicuro.
+----------------------------------------------------------------------------------
+
