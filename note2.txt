@@ -80,5 +80,35 @@ app.get('/data', (req, res) => {
 app.listen(5000);
 
 Usato per SPA, microservizi o backend separati, cors aggiunge le intestazioni necessarie per consentire richieste cross-origin in modo sicuro.
+
+---- Riassunto: allowedHeaders in cors
+
+L’opzione allowedHeaders specifica un elenco di intestazioni HTTP personalizzate che il client è autorizzato a includere nelle richieste verso il server.
+
+Serve per dichiarare esplicitamente quali intestazioni possono essere utilizzate dal client.
+
+Se un’intestazione richiesta non è specificata, la richiesta verrà bloccata dal browser.
+
+Esempio:
+
+allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Cache-Control",
+    "Expires",
+    "Pragma"
+]
+
+Content-Type: Specifica il tipo di contenuto della richiesta (es. application/json).
+
+Authorization: Permette di includere token di autenticazione o chiavi API.
+
+Cache-Control, Expires, Pragma: Utilizzati per gestire la cache delle risposte.
+
+Se il client invia un'intestazione non inclusa in allowedHeaders, come X-Custom-Header, la richiesta verrà bloccata.
+
+Nota Importante
+
+Nel codice fornito, l'intestazione Auttorization è scritta in modo errato. Deve essere corretta in Authorization per evitare errori.
 ----------------------------------------------------------------------------------
 
