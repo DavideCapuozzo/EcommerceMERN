@@ -165,6 +165,28 @@ createRoot(document.getElementById('root')).render(
   
 )
 
+ricapitolando:
+-creo la cartella store
+-creo il file store.js e lo configuro 
+import { configureStore } from "@reduxjs/toolkit";
+importo i miei slice
+-creo la cartella con all interno il mio slice di interesse in questo caso auth-slice > index.js
+creo lo slice 
+import { createSlice } from "@reduxjs/toolkit";
+export const {setUser} = authSlice.actions;
+export default authSlice.reducer;
+-vado ad aggiungere il mio store all applicazione tramite il file main.js
+import { Provider } from 'react-redux'
+<Provider store={store}>
+
+
+---------------------- creazione pagina e componente auth
+vado a creare una cartella pages
+al suo interno creao la cartella auth-pages
+al suo interno creo la pagina login.jsx e register.jsx
+ora vado a creare il componente quindi all'interno della cartella component creo la cartella auth
+al suo interno creo la cartella auth
+al suo interno creo il file layout.jsx
 -------------------------------------------------------------------------------------------------------------------------------------------
 
-min 34.00
+min 43.00
