@@ -107,6 +107,64 @@ npx shadcn@latest init
 
 testiamo l'installazione di un componente
 npx shadcn@latest add button
+
+---------------------- creazione dello store per la gestione degli stati complessi
+creo la cartella store in scr
+al suo interno creo il file store.js
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./auth-slice";
+
+const store = configureStore({
+    reducer:{
+        auth: authReducer
+    }
+})
+
+export default store;
+
+dopo di che andro a dedicare una cartella per ogni stato in questo caso partimo dallo stato di autenticazione:
+quindi creao la cartella authSlice e al suo interno creo il file index.js
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    isAuthenticated : false,
+    isLoading: false,
+    user: null
+}
+
+export const authSlice = createSlice({
+    name:'auth',
+    initialState: initialState,
+    reducers:{
+        setUser:(state, action) => {
+
+        }
+    }
+})
+
+
+export const {setUser} = authSlice.actions;
+export default authSlice.reducer;
+
+una volta fatto cio vado ad importare il mio store nell applicazione, per fare cio vado ad aggiungere il provider nel file main.js
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+import store from './store/store'
+
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+    
+  </BrowserRouter>
+  
+)
+
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 min 34.00
