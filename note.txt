@@ -187,6 +187,72 @@ al suo interno creo la pagina login.jsx e register.jsx
 ora vado a creare il componente quindi all'interno della cartella component creo la cartella auth
 al suo interno creo la cartella auth
 al suo interno creo il file layout.jsx
+
+il componente layout.js anndra a definire per l'appunto la struttura delle pagine in cui andremo ad utilizzarlo
+function AuthLayout(){
+  return(
+    <>
+      <div className="flex min-h-screen w-full">
+        <div className="hidden lg:flex item-center justify-center bg-black w-1/2 px-12">
+          <div className="max-w-md space-y-6 text-center text-primary-foreground">
+            <h1 className="text-4xl font-extrabold tracking-tight">Welcome to Ecommerce Shopping</h1>
+          </div>
+        </div>
+        <div className="flex flex-1 items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+          <Outlet></Outlet>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default AuthLayout
+
+questo layout dividera la pagina in due parti la prima parte con sfondo nero e scritta Welcome to Ecommerce Shopping
+la seconda parte sara riempita dal componente che richiameremo insieme a questo layout grazie a <Outlet></Outlet>
+
+andiamo poi a costruire la pagina login.js
+function AuthLogin(){
+    return(
+        <div>Login </div>
+    )
+}
+
+export default AuthLogin
+
+e all'interno nella nostra pagina app.jsx andremo ad inserire il seguente codice che ci permettera di gestire il layout con il componente pagina
+function App() {
+
+  return (
+    <>
+      <div className='flex flex-col overflow-hidden bg-white'>
+        <h1>Header Component</h1>
+        <Routes>
+          <Route path='/auth' element={<AuthLayout />}>
+            <Route path='login' element= {<AuthLogin />}></Route>
+            <Route path='register' element= {<AuthRegister/>}></Route>
+          </Route>
+        </Routes>
+      </div>
+    </>
+  )
+}
+
+export default App
+
+quindi se andro a richiamare il link http://localhost:5173/auth/login mi restituira il layout con al segna posto outlet
+il componente login
+
+se andro a cercare la pagina http://localhost:5173/ mi verra restituito semplicemente il componente <h1>Header Component</h1>
+senza tutto il sistema di Routes
+
+con questa stessa base andiamo a creare tutte le pagine utili admin, notfound, Shopping
+
+------------------------ check Auth
+-Ora andiamo a creare la cartella common al cui interno creeremo il fil echeck-auth 
+dove andremo ad inserire la logica per controllare l'autenticazione di un utente
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------
 
 min 43.00

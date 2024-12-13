@@ -6,27 +6,14 @@ import { Provider } from 'react-redux'
 import './index.css'
 import App from './App.jsx'
 import store from './store/store'
-import Login from './pages/auth-page/Login'
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App></App>
-  },
-  {
-    path: "/login",
-    element: <Login></Login>
-  }
-])
+import Login from './pages/auth/Login'
 
 createRoot(document.getElementById('root')).render(
-
-  <Provider store={store}>
-    <RouterProvider router={router}></RouterProvider>
-  </Provider>
-    
-
-  
+  <BrowserRouter>
+    <Provider store={store}>
+      <App></App>
+    </Provider>
+  </BrowserRouter>
 )
 
 
