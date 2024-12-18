@@ -249,10 +249,108 @@ senza tutto il sistema di Routes
 con questa stessa base andiamo a creare tutte le pagine utili admin, notfound, Shopping
 
 ------------------------ check Auth
--Ora andiamo a creare la cartella common al cui interno creeremo il fil echeck-auth 
+-Ora andiamo a creare la cartella common al cui interno creeremo il file check-auth.jsx 
 dove andremo ad inserire la logica per controllare l'autenticazione di un utente
+
+import { Navigate, useLocation } from "react-router-dom"
+
+function CheckAuth({isAuthentucated, user, children}){
+
+    const location = useLocation()
+
+    if(!isAuthentucated && !(location.pathname.includes('/login') || location.pathname.includes('/register'))){
+        return<Navigate to="/auth/login"></Navigate>
+    }
+
+    if(isAuthentucated && (location.pathname.includes('/login') || location.pathname.includes('/register'))){
+        if(user?.role === 'admin'){
+            return <Navigate to= "/admin/dashboard"></Navigate>
+        } else{
+            return <Navigate to= "/shop/home"></Navigate>
+        }
+    }
+
+    if(isAuthentucated && user?.role !== 'admin' && location.pathname.includes('admin')){
+        return <Navigate to="/unauth-page"></Navigate>
+    }
+
+    if(isAuthentucated && user?.role === 'admin' && location.pathname.includes('shop')){
+        return <Navigate to="/admin/dashboard"></Navigate>
+    }
+
+    return(
+        <>
+            {children}
+        </>
+    )
+
+    
+}
+
+export default CheckAuth
+
+Navigate libreria che ci permette di linkare le pagine
+useLocation libreria che ci permette di capire in che pagina si trova il nostro utente
+
+----------- Unauthopage
+andiamo a creare il file Unauthopage.jsx all'interno della cartella page > Unauthopage-page
+questa sarà la pagina che verrà visualizzata nel caso l'utente che sta provando ad accedere non 
+avesse i permessi per farlo
+
+Ora per andare a far si che le nostre regole check-auth.jsx vengano applicate alle pagine nel nostro file
+app.jsx andiamo a creare le variabili di interesse  isAuthentucated e user e andreamo ad importare
+il nostro componente check-auth.jsx all'interno delle route 
+
+function App() {
+
+  /* const isAuthentucated = false;
+  const user = null */
+
+  /* const isAuthentucated = true;
+  const user = {
+    name:"Samsung",
+    role: "user",
+  }*/
+
+  const isAuthentucated = true;
+  const user = {
+    name:"Samsung",
+    role: "admin",
+  }
+
+  return (
+    <>
+      <div className='flex flex-col overflow-hidden bg-white'>
+        
+        <Routes>
+          <Route path='/auth' element={<CheckAuth isAuthentucated={isAuthentucated} user={user}><AuthLayout /></CheckAuth>}>
+            <Route path='login' element= {<AuthLogin />}></Route>
+            <Route path='register' element= {<AuthRegister/>}></Route>
+          </Route>
+          <Route path='/admin' element={<CheckAuth isAuthentucated={isAuthentucated} user={user}><AdminLayout /></CheckAuth>}>
+            <Route path='dashboard' element= {<AdminDashboard />}></Route>
+            <Route path='products' element= {<AdminProducts />}></Route>
+            <Route path='orders' element= {<AdminOrders />}></Route>
+            <Route path='feauters' element= {<AdminFeauters />}></Route>
+          </Route>
+          <Route path='/shop' element={<CheckAuth isAuthentucated={isAuthentucated} user={user}><ShoppingLayout/></CheckAuth>}>
+            <Route path='account' element={<ShoppingAccount></ShoppingAccount>}></Route>
+            <Route path='checkout' element={<ShoppingCheckout></ShoppingCheckout>}></Route>
+            <Route path='home' element={<ShoppingHome></ShoppingHome>}></Route>
+            <Route path='listing' element={<ShoppingListing></ShoppingListing>}></Route>
+          </Route>
+          <Route path='*' element={<NotFound></NotFound>}></Route>
+          <Route path='/unauth-page' element={<UnauthPage></UnauthPage>}></Route>
+        </Routes>
+      </div>
+    </>
+  )
+}
+
+ora possiamo provare a giocare con i vari link per vedere se le nostre regole vengono applicate correttamente
+
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
-min 1:26
+min 1:29

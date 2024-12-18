@@ -22,14 +22,14 @@ import UnauthPage from './pages/unauth-page'
 
 function App() {
 
-  /* const isAuthentucated = false;
-  const user = null */
+  const isAuthentucated = false;
+  const user = null 
 
-  const isAuthentucated = true;
+  /* const isAuthentucated = false;
   const user = {
     name:"Samsung",
-    role: "user",
-  }
+    role: "admin",
+  } */
 
   return (
     <>
