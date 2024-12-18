@@ -352,5 +352,10 @@ ora possiamo provare a giocare con i vari link per vedere se le nostre regole ve
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
+########################################### form register and login
+guardando i file scopri tutta la logica per integrare il form nelle pagine di login e register
+
+ripassala
+
 
 min 1:29
