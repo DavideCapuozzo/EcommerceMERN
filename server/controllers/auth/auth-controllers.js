@@ -6,14 +6,16 @@ const User = require('../../models/User')
 
 //register
 
-const register = async(req, res) =>{
+exports.registerUser = async(req, res) =>{
     const {userName, email, password} = req.body;
 
     try {
 
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
-            userName, email, password
+            userName, 
+            email, 
+            password: hashPassword,
         })
 
         await newUser.save()
@@ -46,4 +48,20 @@ const login = async(req, res) =>{
         });
     }
 }
+
+
+//loginOut
+
+
+
+
+
+
+
+
+
+
+
+
+//auth middleware
 
