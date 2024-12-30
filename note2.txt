@@ -192,3 +192,77 @@ jwt.verify(token, "secretKey", (err, decoded) => {
     if (err) res.status(403).send("Token non valido.");
     else req.user = decoded; // Salva i dati dell'utente nella richiesta
 });
+
+
+
+----------------------------------------------------------------------------------
+createAsyncThunk / extraReducers / builder
+
+extraReducers in Redux Toolkit
+Gli extraReducers sono una funzionalità di Redux Toolkit che consente di gestire azioni esterne al tuo slice. Questo è utile quando vuoi integrare azioni asincrone (come quelle create con createAsyncThunk) o azioni di altri slice nel tuo slice.
+
+Funzionamento degli extraReducers
+Gestione delle azioni esterne:
+
+Gli extraReducers permettono al tuo slice di rispondere ad azioni definite esternamente, ad esempio:
+Azioni di un altro slice.
+Azioni asincrone di createAsyncThunk.
+Automazione con createAsyncThunk: Quando usi createAsyncThunk, Redux Toolkit genera tre tipi di azioni automaticamente:
+
+pending: Quando l'operazione è iniziata.
+fulfilled: Quando l'operazione è completata con successo.
+rejected: Quando l'operazione fallisce.
+Gli extraReducers aggiornano lo stato in base a queste azioni.
+
+Esempio pratico con registerUser
+Nel caso di registerUser, che effettua una richiesta API per registrare un utente, puoi aggiornare il tuo stato con extraReducers:
+
+javascript
+Copia codice
+extraReducers: (builder) => {
+    builder
+        .addCase(registerUser.pending, (state) => {
+            state.isLoading = true; // Quando la richiesta è in corso
+        })
+        .addCase(registerUser.fulfilled, (state, action) => {
+            state.isLoading = false; // Richiesta completata
+            state.user = action.payload; // Imposta i dati dell'utente
+            state.isAuthenticated = true; // Autenticazione riuscita
+        })
+        .addCase(registerUser.rejected, (state) => {
+            state.isLoading = false; // Richiesta fallita
+            state.user = null; // Resetta i dati dell'utente
+            state.isAuthenticated = false; // Autenticazione fallita
+        });
+}
+Strumenti di builder
+Il parametro builder consente di definire in modo chiaro e leggibile più regole negli extraReducers.
+
+Metodi principali di builder
+addCase(action, reducer):
+
+Specifica un'azione da gestire e il suo reducer.
+Esempio:
+javascript
+Copia codice
+addCase(registerUser.fulfilled, (state, action) => { ... });
+addMatcher(matcher, reducer):
+
+Gestisce azioni che soddisfano una condizione specifica (es. tipi di azioni simili).
+Esempio:
+javascript
+Copia codice
+addMatcher(
+    (action) => action.type.endsWith('/rejected'),
+    (state) => { state.isLoading = false; }
+);
+addDefaultCase(reducer):
+
+Specifica un reducer di fallback per tutte le azioni non gestite esplicitamente.
+Differenze tra reducers ed extraReducers
+Reducers	ExtraReducers
+Gestiscono azioni interne al slice.	Gestiscono azioni esterne o globali.
+Definite nella proprietà reducers.	Reagiscono ad azioni come quelle di createAsyncThunk.
+Esempio: increment, decrement.	Esempio: pending, fulfilled, rejected.
+Conclusione
+Gli extraReducers sono essenziali per integrare logiche basate su azioni asincrone o globali. Nel caso di registerUser, permettono di gestire i tre stati principali (pending, fulfilled, rejected) e aggiornare lo stato della tua applicazione in base al risultato delle richieste API.
