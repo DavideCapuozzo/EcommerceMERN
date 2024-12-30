@@ -504,6 +504,148 @@ const login = async(req, res) =>{
 ----------------------------------------------------------------------------------------------------------
 TORNIAMO ALLA PARTE CLIENT PER APPLICARE LE NOSTRE API APPENA DI REGISTRAZIONE UTENTE CREATE
 
+register.jsx
+
+import CommonForm from "@/components/common/form";
+import { registerFormControls } from "@/config";
+import { registerUser } from "@/store/auth-slice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+
+
+const initialState ={
+    userName: '',
+    email:'',
+    password:''
+}
+
+function AuthRegister(){
+
+    const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { toast } = useToast()
+
+    function onSubmit(event){
+        //console.log(event)
+        event.preventDefault()
+        dispatch(registerUser(formData)).then((data)=> {
+            if(data?.payload?.success){
+                toast({
+                    title: data?.payload?.message, //il messaggio e quello che viene restituito dalla funzione di successo nella cartella server>controllers>auth-controllers
+                })
+                navigate('/auth/login');
+            } 
+            //console.log(data)
+        })
+    }
+
+    console.log(formData)
+    return(
+        <div className="mx-auto w-full max-w-md space-y-6">
+            <div className="text-center">
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">Create new Account</h1>
+                <p className="mt-2">Already have an account
+                    <Link className="font-medium ml-2 text-primary hover:underline " to='/auth/login'>Login</Link>
+                </p>
+
+            </div>
+            <CommonForm
+                formControls={registerFormControls}
+                buttonText={'Sign Up'}
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={onSubmit}
+            />
+            
+        </div>
+    )
+}
+
+export default AuthRegister;
+
+---------------------------------------------------------------------------------------------------------------------------
+
+store>auth-slice>index.js
+
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const initialState = {
+    isAuthenticated : false,
+    isLoading: false,
+    user: null
+}
+
+export const registerUser = createAsyncThunk("/auth/register",
+    async(FormData) => {
+        //in quanto ho indicato nel mio server>server.js la porta 5000 e il resto del percorso e' 
+        // quello inserito sempre nello stesso file che mi permette di accedere alle routes quindi 
+        // andro a completare il mio link con register che 'e la route 
+        // che mi permette di accedere al controller 
+        const response = await axios.post('http://localhost:5000/api/auth/register', FormData, {
+            withCredentials: true
+        });
+
+        return response.data;
+    }
+)
+
+export const authSlice = createSlice({
+    name:'auth',
+    initialState: initialState,
+    reducers:{
+        setUser:(state, action) => {
+
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(registerUser.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false
+            })
+    }
+})
+
+
+export const {setUser} = authSlice.actions;
+export default authSlice.reducer;
+
+---------------------------------------------------------------------------------------------------------
+
+main.jsx
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+import store from './store/store'
+import Login from './pages/auth/Login'
+import { Toaster } from './components/ui/toaster'
+
+createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <App></App>
+      <Toaster></Toaster>
+    </Provider>
+  </BrowserRouter>
+)
 
 
 
