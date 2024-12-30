@@ -25,11 +25,11 @@ function App() {
   const isAuthentucated = false;
   const user = null 
 
-  /* const isAuthentucated = false;
+  /* const isAuthentucated = true;
   const user = {
     name:"Samsung",
-    role: "admin",
-  } */
+    role: "user",
+  }  */
 
   return (
     <>
