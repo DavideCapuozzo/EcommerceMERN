@@ -112,3 +112,83 @@ Nota Importante
 Nel codice fornito, l'intestazione Auttorization è scritta in modo errato. Deve essere corretta in Authorization per evitare errori.
 ----------------------------------------------------------------------------------
 
+Crittografa 
+
+bcrypt e jsonwebtoken (jwt)
+bcrypt
+Scopo: Proteggere le password degli utenti.
+Funzioni principali:
+
+Hash delle password:
+Crittografa la password prima di salvarla nel database.
+
+javascript
+Copia codice
+bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) throw err;
+    // Salva hashedPassword nel database
+});
+Confronto password:
+Confronta una password fornita dall'utente con un hash salvato.
+
+javascript
+Copia codice
+bcrypt.compare(enteredPassword, storedHash, (err, isMatch) => {
+    if (isMatch) {
+        console.log("Password corretta.");
+    } else {
+        console.log("Password errata.");
+    }
+});
+jsonwebtoken (jwt)
+Scopo: Generare e verificare token per autenticazione e autorizzazione.
+Struttura del JWT: Header.Payload.Signature
+Funzioni principali:
+
+Generare un token:
+Crea un token dopo un login corretto.
+
+javascript
+Copia codice
+const token = jwt.sign({ id: userId }, "secretKey", { expiresIn: "1h" });
+console.log(token);
+Verificare un token:
+Controlla l'integrità del token ricevuto dal client.
+
+javascript
+Copia codice
+jwt.verify(token, "secretKey", (err, decoded) => {
+    if (err) console.log("Token non valido.");
+    else console.log("Dati decodificati:", decoded);
+});
+Flusso comune: bcrypt + jwt
+Registrazione utente:
+La password viene crittografata con bcrypt e salvata.
+
+javascript
+Copia codice
+bcrypt.hash(password, 10, (err, hashedPassword) => {
+    // Salva hashedPassword nel database
+});
+Login utente:
+Confronta la password con bcrypt.compare.
+Se corrisponde, genera un JWT.
+
+javascript
+Copia codice
+bcrypt.compare(enteredPassword, storedHash, (err, isMatch) => {
+    if (isMatch) {
+        const token = jwt.sign({ id: userId }, "secretKey", { expiresIn: "1h" });
+        res.json({ token });
+    }
+});
+Autorizzazione:
+Il client invia il JWT con ogni richiesta.
+Il server verifica il token prima di concedere l'accesso.
+
+javascript
+Copia codice
+jwt.verify(token, "secretKey", (err, decoded) => {
+    if (err) res.status(403).send("Token non valido.");
+    else req.user = decoded; // Salva i dati dell'utente nella richiesta
+});

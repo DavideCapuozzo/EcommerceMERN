@@ -433,7 +433,99 @@ module.exports = mongoose.model('User', UserSchema);
 ----------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
 
-############ 
+############ routes/auth/auth-routes.js
+const express = require('express')
+const router = express.Router()
+const { registerUser } = require('../../controllers/auth/auth-controllers')
 
 
-min 1:44
+router.post('/register', registerUser)
+
+
+module.exports = router;
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+
+############ controllers/auth/auth-controllers.js
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../../models/User')
+
+
+
+//register
+
+exports.registerUser = async(req, res) =>{
+    const {userName, email, password} = req.body;
+
+    try {
+
+        const hashPassword = await bcrypt.hash(password, 12);
+        const newUser = new User({
+            userName, 
+            email, 
+            password: hashPassword,
+        })
+
+        await newUser.save()
+        res.status(200).json({
+            success: true,
+            message: "Registration Succesfully",
+        })
+        
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({
+            success: false,
+            message: "Some Error Occurred",
+        });
+    }
+}
+
+//login
+
+const login = async(req, res) =>{
+
+
+    try {
+        
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({
+            success: false,
+            message: "Some error occurred",
+        });
+    }
+}
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+TORNIAMO ALLA PARTE CLIENT PER APPLICARE LE NOSTRE API APPENA DI REGISTRAZIONE UTENTE CREATE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+min 2.10

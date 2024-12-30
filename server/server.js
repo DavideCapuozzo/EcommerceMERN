@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use( //Metodo per aggiungere middleware all'applicazione
     cors({
-        origin : 'http://localhost:5173/',
-        methods : ['GET', 'POST', 'DELATE', 'PUT'],
+        origin : 'http://localhost:5173',
+        methods : ['GET', 'POST', 'DELETE', 'PUT'],
         allowedHeaders : [
             "Content-Type",
             "Auttorization",
@@ -28,7 +28,7 @@ app.use( //Metodo per aggiungere middleware all'applicazione
     }) //Aggiunge il supporto per le richieste Cross-Origin. L'oggetto vuoto {} indica che tutte le origini sono permesse.
 )
 
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRoutes)
 
