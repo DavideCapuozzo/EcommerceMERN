@@ -379,7 +379,61 @@ guardando i file scopri tutta la logica per integrare il form nelle pagine di lo
 ###################################################################################################################
 ####################################################################################################################
 
+Ora vogliamo che tutti i nostri utenti si possano registrare e autenticare e vogliamo salvare 
+tutte le credenziali dei nostri utenti in un database mongoDB.
+per fare cio come abbiamo imparato dobbiamo costruire la nostra struttura di chiamate per
+poter compiere le varie azioni di registrazione, accesso, eliminazione e modicfica del nostro utente.
 
+utulizzeremo la struttura classica di route composta dalle seguenti cartelle:
+models, routes, controllers
+
+----------------------------------------------------------------------------------------------------------------------------
+############################ utente
+Partendo dall'utente andiamo a creare quello che `e il suo schema di partenza
+cioe i dati che mongoDb si aspettera di ricevere quando un utente si registra o cerca di accedere
+quindi inseriramo all'interno della cartella models il file Users.js attualmente cosi composto:
+
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const UserSchema = new mongoose.Schema(
+    {
+        userName:{
+            type: String,
+            ref: 'User',
+            unique: true,
+            require: [true, "Name is required"],
+            minlength: [2, "Name too short"],
+            maxlength: [10, "Name too long"],
+            match: [/^[a-zA-Z\s'-]+$/, 'Invalid name characters']
+        },
+
+        email:{
+            type:String,
+            unique: true,
+            ref:'Mail',
+            require: [true, "can't be blank"],
+            match: [/\S+@\S+\.\S+/, 'is invalid'],
+        },
+
+        password:{
+            type: String,
+            ref: 'Password',
+            require: [true, "Password is required"],
+        },
+
+        role:{
+            type: String,
+            default: 'user'
+        },
+    }
+)
+
+module.exports = mongoose.model('User', UserSchema);
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+
+############ 
 
 
 min 1:44
