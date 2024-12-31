@@ -29,7 +29,12 @@ function AuthRegister(){
                     title: data?.payload?.message, //il messaggio e quello che viene restituito dalla funzione di successo nella cartella server>controllers>auth-controllers
                 })
                 navigate('/auth/login');
-            } 
+            } else{
+                toast({
+                    title: data?.payload?.message, //il messaggio e quello che viene restituito dalla funzione di successo nella cartella server>controllers>auth-controllers
+                    variant: "destructive",
+                })
+            }
             //console.log(data)
         })
     }
