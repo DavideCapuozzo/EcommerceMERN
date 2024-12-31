@@ -4,7 +4,7 @@ import axios from "axios";
 const initialState = {
     isAuthenticated : false,
     isLoading: false,
-    user: null
+    user: null 
 }
 
 export const registerUser = createAsyncThunk("/auth/register",
@@ -62,9 +62,10 @@ export const authSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(loginUser.fulfilled, (state, action) => {
+                console.log(action);
                 state.isLoading = false;
-                state.user = action.payload;
-                state.isAuthenticated = true
+                state.user = action.payload.success ? action.payload.user : null;
+                state.isAuthenticated = action.payload.success ? true : false;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;

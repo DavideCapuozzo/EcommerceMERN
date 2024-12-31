@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema(
             unique: true,
             require: [true, "Name is required"],
             minlength: [2, "Name too short"],
-            maxlength: [10, "Name too long"],
+            maxlength: [50, "Name too long"],
             match: [/^[a-zA-Z\s'-]+$/, 'Invalid name characters']
         },
 
