@@ -91,16 +91,12 @@ exports.loginUser = async(req, res) =>{
 
 //loginOut
 
+exports.logoutUser = (req, res) =>{
+    res.clearCookie('token').json({
+        success: true,
+        message: 'Logout Successfully',
+    })
+}
 
 
-
-
-
-
-
-
-
-
-
-//auth middleware
-
+//middleware... crea un altra cartella con all'interno tutte le regole di middleware
