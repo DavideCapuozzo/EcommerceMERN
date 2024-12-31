@@ -100,3 +100,21 @@ exports.logoutUser = (req, res) =>{
 
 
 //middleware... crea un altra cartella con all'interno tutte le regole di middleware
+exports.authMiddleware = async(req, res, next) => {
+    const token = req.cookies.token;
+    if(!token) return res.status(401).json({
+        success: false,
+        message: 'Unauthorised User'
+    })
+
+    try {
+        const decoded = jwt.verifiy(token, 'CLIENT_SECRET_KEY');
+        req.user = decoded;
+        next()
+    } catch(error){
+        res.status(401).json({
+            success: false,
+            message: 'Unauthorised User'
+        })
+    }
+}
