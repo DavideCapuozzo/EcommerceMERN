@@ -20,6 +20,8 @@ import { useEffect } from 'react'
 import UnauthPage from './pages/unauth-page'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkAuth } from './store/auth-slice'
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 
 
@@ -35,7 +37,9 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]) 
 
-  if(isLoading) return <div>Loading...</div>
+  if(isLoading) return <Skeleton className="w-[800px] bg-black h-[600px] " />
+
+  console.log(isLoading, user); 
 
   /* const isAuthentucated = true;
   const user = {
