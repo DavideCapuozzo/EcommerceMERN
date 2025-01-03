@@ -16,9 +16,11 @@ import ShoppingCheckout from './pages/shopping-view/checkout'
 import ShoppingHome from './pages/shopping-view/home'
 import ShoppingListing from './pages/shopping-view/listing'
 import CheckAuth from './components/common/check-auth'
-import { use } from 'react'
+import { useEffect } from 'react'
 import UnauthPage from './pages/unauth-page'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkAuth } from './store/auth-slice'
+
 
 
 function App() {
@@ -26,7 +28,14 @@ function App() {
   /* const isAuthentucated = false;
   const user = null  */
 
-  const {user, isAuthenticated} = useSelector(state => state.auth)
+  const {user, isAuthenticated, isLoading} = useSelector(state => state.auth)
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(checkAuth());
+  }, [dispatch]) 
+
+  if(isLoading) return <div>Loading...</div>
 
   /* const isAuthentucated = true;
   const user = {
