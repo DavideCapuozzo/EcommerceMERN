@@ -3,8 +3,8 @@ const express = require('express')
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser'); //Un middleware che analizza i cookie inviati dal client al server.
 const cors = require('cors'); //Un middleware che gestisce il Cross-Origin Resource Sharing, permettendo ad applicazioni in altri domini di comunicare con il server.
-const { Routes } = require('react-router-dom');
 const authRoutes = require('./routes/auth/auth-routes')
+const adminProductsRouter = require('./routes/admin/products-routes')
 
 const URI_MONGO = process.env.URI_MONGO; // Usa la variabile di ambiente
 
@@ -30,6 +30,7 @@ app.use( //Metodo per aggiungere middleware all'applicazione
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/api/auth', authRoutes)
+app.use('/api/auth', authRoutes);
+app.use('/api/admin/products', adminProductsRouter);
 
 app.listen(PORT, ()=> console.log(`Server is now running on port ${PORT}`))
