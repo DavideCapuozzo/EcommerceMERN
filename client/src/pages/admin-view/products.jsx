@@ -47,7 +47,7 @@ function AdminProducts(){
                         <SheetTitle>Add new Product</SheetTitle>
                         <SheetDescription></SheetDescription>
                     </SheetHeader>
-                    <ProductImageUpload imageFile={imageFile} setImageFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} ></ProductImageUpload>
+                    <ProductImageUpload imageFile={imageFile} setImageFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} ></ProductImageUpload>
                     <div className="py-6">
                         <CommonForm
                             onSubmit={onSubmit}

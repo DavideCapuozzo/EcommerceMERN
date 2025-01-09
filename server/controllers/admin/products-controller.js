@@ -8,7 +8,7 @@ const handleImageUpload = async(req, res) => {
         const result = await ImageUploadUtil(url);
 
         res.json({
-            succes: true,
+            success: true,
             result
         });
 
