@@ -3,7 +3,9 @@ import CommonForm from "@/components/common/form"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { addProductFormElements } from "@/config"
-import { Fragment, useState } from "react"
+import { fetchAllProducts } from "@/store/admin/products-slice"
+import { Fragment, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 const initialFormData ={
     image:null,
@@ -23,12 +25,19 @@ function AdminProducts(){
     const [imageFile, setImageFile] = useState(null);
     const [ uploadedImageUrl, setUploadedImageUrl] = useState('')
     const [ imageLoadingState, setImageLoadingState] = useState(false)
+    const { productList } = useSelector(state => state.adminProducts)
+    const dispatch = useDispatch()
 
-    function onSubmit(){
-        
+    function onSubmit(event){
+        event.preventDefault();
+
     }
 
-    console.log(formData, "from Data")
+    useEffect(()=>{
+        dispatch(fetchAllProducts())
+    }, [dispatch])
+
+    console.log(productList, "from Data")
 
     return(
         <Fragment>
