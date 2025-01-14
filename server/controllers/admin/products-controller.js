@@ -52,9 +52,10 @@ const addProduct = async(req, res) => {
 const fetchAllProducts = async(req, res) => {
     try{
         const listOfProducts = await Product.find({});
-        res.status(201).json({
+        console.log(listOfProducts, "productControllers")
+        res.status(200).json({
             success: true,
-            data: fetchAllProducts
+            data: listOfProducts,
         }); 
 
     }catch(e){

@@ -20,9 +20,18 @@ export const addNewProduct = createAsyncThunk('/products/addnewproduct', async(F
 })
 
 export const fetchAllProducts = createAsyncThunk('/products/fetchAllProducts', async() => {
-    const result = await axios.get('http://localhost:5000/api/admin/products/get');
+    console.log('fetchAllProducts is being called...');
+    try{
+        const result = await axios.get('http://localhost:5000/api/admin/products/get');
+        console.log(result?.data, "CHIAMATA API FETCHALLPRODUCTS")
+        return result?.data
 
-    return result?.data
+    }catch (error){
+        console.error('Error during API call:', error);
+        throw error; 
+    }
+    
+    
 })
 
 
@@ -43,24 +52,36 @@ export const deleteProduct = createAsyncThunk('/products/deleteProduct', async(i
     return result?.data
 })
 
+export const testFetch = createAsyncThunk('/test/fetch', async () => {
+    console.log('testFetch is being called...');
+    return { data: [{ title: 'Test Product' }] };
+});
+
 
 
 const AdminProductsSlice = createSlice({
     name: 'adminProducts',
     initialState,
-    reducers : {
-        exteraReducers: (builder) => {
-            builder.addCase(fetchAllProducts.pending, (state) => {
-                state.isLoading = true
-            }).addCase(fetchAllProducts.fulfilled, (state, action) => {
-                console.log(action.payload)
-                state.isLoading = false
-                state.productList = action.payload
-            }).addCase(fetchAllProducts.rejected, (state, action) => {
-                state.isLoading = false
-                state.productList = []
+    reducers : {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchAllProducts.pending, (state) => {
+                console.log('fetchAllProducts pending...');
+                state.isLoading = true;
             })
-        }
+            .addCase(fetchAllProducts.fulfilled, (state, action) => {
+                console.log('fetchAllProducts fulfilled with data:', action.payload);
+                state.isLoading = false;
+                state.productList = action.payload.data;
+            })
+            .addCase(fetchAllProducts.rejected, (state, action) => {
+                console.error('fetchAllProducts rejected with error:', action.error);
+                state.isLoading = false;
+                state.productList = [];
+            })
+            .addCase(testFetch.fulfilled, (state, action) => {
+                console.log('testFetch fulfilled:', action.payload);
+            });
     }
 })
 
