@@ -71,7 +71,7 @@ const fetchAllProducts = async(req, res) => {
 
 const editProduct = async(req, res) => {
     try{
-        const {id} = require.params;
+        const {id} = req.params;
         const {image, title, description, category, brand, price, salePrice, totalStock} = req.body;
         const findProduct = await Product.findById(id);
         if(!findProduct) return res.status(404).json({
