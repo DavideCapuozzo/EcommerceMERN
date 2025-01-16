@@ -35,15 +35,22 @@ export const fetchAllProducts = createAsyncThunk('/products/fetchAllProducts', a
 })
 
 
-export const editProduct = createAsyncThunk('/products/editProduct', async(id, FormData) => {
-    const result = await axios.put(`http://localhost:5000/api/admin/products/edit/${id}`, FormData, {
+export const editProduct = createAsyncThunk('/products/editProduct', async ({ id, formData }) => {
+    console.log("##########################");
+    console.log("Generated URL:", `http://localhost:5000/api/admin/products/edit/${id}`);
+    console.log("##########################");
+
+    const result = await axios.put(`http://localhost:5000/api/admin/products/edit/${id}`, formData, {
         headers: {
             "Content-Type": "application/json",
-        }
-    })
+        },
+    });
 
-    return result?.data
-})
+    return result?.data;
+});
+
+
+
 
 
 export const deleteProduct = createAsyncThunk('/products/deleteProduct', async(id) => {

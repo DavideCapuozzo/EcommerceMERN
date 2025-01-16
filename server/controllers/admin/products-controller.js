@@ -70,6 +70,10 @@ const fetchAllProducts = async(req, res) => {
 // edit product
 
 const editProduct = async(req, res) => {
+
+    console.log("Request Params:", req.params); 
+    console.log("Request Body:", req.body);  
+
     try{
         const {id} = req.params;
         const {image, title, description, category, brand, price, salePrice, totalStock} = req.body;
