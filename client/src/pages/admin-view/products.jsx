@@ -66,6 +66,10 @@ function AdminProducts(){
         });
     }
 
+    function isFormValid(){
+        return Object.keys(formData).map((key) => formData[key] !== "").every((item) => item)
+    }
+
     useEffect(()=>{
         console.log('Dispatching fetchAllProducts...');
         dispatch(fetchAllProducts())
@@ -81,8 +85,8 @@ function AdminProducts(){
             <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {
                     productList && productList.length > 0 
-                    ? productList.map(productItem => (
-                        <AdminProductTile setFormData={setFormData} setOpenCreateProductsDialog={setOpenCreateProductsDialog} setCurrentEditedId={setCurrentEditedId}  product={productItem} />
+                    ? productList.map((productItem) => (
+                        <AdminProductTile setFormData={setFormData} setOpenCreateProductsDialog={setOpenCreateProductsDialog} setCurrentEditedId={setCurrentEditedId} product={productItem} />
                         )) 
                     : null }
             </div>
@@ -111,6 +115,7 @@ function AdminProducts(){
                             setFormData={setFormData}
                             buttonText= {currentEditedId !== null ? "Edit" : "Add"}
                             formControls={addProductFormElements}
+                            isBtnDisabled={!isFormValid()}
                         >
 
                         </CommonForm>

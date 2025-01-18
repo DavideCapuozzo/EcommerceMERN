@@ -35,7 +35,7 @@ function AdminProductTile({
                 <CardFooter className="flex justify-between items-center">
                     <Button onClick={() => {
                         setOpenCreateProductsDialog(true);
-                        setCurrentEditedId(String(product?._id)); // Converte in stringa
+                        setCurrentEditedId(String(product?._id));
                         setFormData(product);
                     }}>
                         Edit
