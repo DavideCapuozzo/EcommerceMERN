@@ -28,7 +28,7 @@ function ShoppingListing(){
                 <div className="p-4 border-b flex items-center justify-between">
                     <h2 className="text-lg font-extrabold ">All Prooducts</h2>
                     <div className="flex items-center gap-3">
-                        <span className="text-muted-foreground">10 Products</span>
+                        <span className="text-muted-foreground">{productList?.length} Products</span>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm" className="flex items-center gap-1">
