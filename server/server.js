@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser'); //Un middleware che analizza i co
 const cors = require('cors'); //Un middleware che gestisce il Cross-Origin Resource Sharing, permettendo ad applicazioni in altri domini di comunicare con il server.
 const authRoutes = require('./routes/auth/auth-routes')
 const adminProductsRouter = require('./routes/admin/products-routes')
+const shopProductsRouter = require('./routes/shop/products-routes')
 
 const URI_MONGO = process.env.URI_MONGO; // Usa la variabile di ambiente
 
@@ -32,5 +33,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin/products', adminProductsRouter);
+app.use('/api/shop/products', shopProductsRouter);
 
 app.listen(PORT, ()=> console.log(`Server is now running on port ${PORT}`))
