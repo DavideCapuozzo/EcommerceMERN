@@ -20,7 +20,7 @@ function ProductFilter({filters, handleFilter}) {
                                 {
                                     filterOptions[keyItem].map((option)=> 
                                         <Label className="flex font-medium items-center gap-2">
-                                            <Checkbox className="p-2" onCheckedChange={()=> handleFilter(keyItem, option.id)}></Checkbox>{option.label}
+                                            <Checkbox className="p-2" checked={filters && Object.keys(filters).length > 0 && filters[keyItem] && filters[keyItem].indexOf(option.id) > -1} onCheckedChange={()=> handleFilter(keyItem, option.id)}></Checkbox>{option.label}
                                         </Label>
                                     )
                                 }
