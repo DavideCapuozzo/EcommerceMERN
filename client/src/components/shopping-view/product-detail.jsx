@@ -11,11 +11,36 @@ import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { StarIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useDispatch, useSelector } from "react-redux"
+import { setProductDetails } from "@/store/shop/products-slice"
   
 
 function ProductDetailsDialog({open, setOpen, productDetails}) {
+
+    const dispatch = useDispatch()
+    const {user} = useSelector(state => state.auth)
+
+    function handleAddToCart(getCurrentProductId){
+        console.log(getCurrentProductId, "getCurrentProductId")
+        dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data=> {
+            if(data?.payload?.success){
+                dispatch(fetchCartItems(user?.id))
+                toast({
+                    title: "Product is added to Cart",
+                })
+            }
+        })
+        
+    }
+
+    function handleDialogClose(){
+        setOpen(false)
+        dispatch(setProductDetails())
+    }
+
+
     return(
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={handleDialogClose}>
             <DialogContent className="grid  grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
                 <div className="relative overflow-hidden rounded-lg">
                     <img src={productDetails?.image} alt={productDetails?.title} width={600} height={600} className="aspect-square w-full object-cover"/>
@@ -43,7 +68,7 @@ function ProductDetailsDialog({open, setOpen, productDetails}) {
                     </div>
                     
                     <div className="mt-5 mb-5">
-                        <Button className="w-full">Add to Cart</Button>
+                        <Button className="w-full" onClick={()=> handleAddToCart(productDetails?._id)}>Add to Cart</Button>
                         
                     </div>
                     <Separator></Separator>
