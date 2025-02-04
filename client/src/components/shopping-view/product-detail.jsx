@@ -13,12 +13,15 @@ import { StarIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useDispatch, useSelector } from "react-redux"
 import { setProductDetails } from "@/store/shop/products-slice"
+import { useToast } from "@/hooks/use-toast";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice"
   
 
 function ProductDetailsDialog({open, setOpen, productDetails}) {
 
     const dispatch = useDispatch()
     const {user} = useSelector(state => state.auth)
+    const {toast} = useToast()
 
     function handleAddToCart(getCurrentProductId){
         console.log(getCurrentProductId, "getCurrentProductId")
