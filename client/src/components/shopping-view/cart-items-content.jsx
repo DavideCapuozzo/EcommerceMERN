@@ -15,7 +15,7 @@ function UserCartItemsContent({cartItems}) {
             typeOfAction === 'plus' ?
             getCartItem?.quantity + 1 : getCartItem?.quantity - 1
         })).then(data => {
-                if(data?.payload?.sucess){
+                if(data?.payload?.success){
                     toast({
                         title: "Product is added to Cart",
                     })
@@ -27,7 +27,7 @@ function UserCartItemsContent({cartItems}) {
         dispatch(
             deleteCartItem({userId : user?.id, productId: getCartItem.productId})
         ).then(data => {
-            if(data?.payload?.sucess){
+            if(data?.payload?.success){
                 toast({
                     title: "Product is deleted to Cart",
                 })
