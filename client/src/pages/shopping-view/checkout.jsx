@@ -33,7 +33,7 @@ function ShoppingCheckout(){
                         </div>
                     </div>
                     <div className='mt-4 w-full'>
-                        <Button>Checkout whit PayPal</Button>
+                        <Button className="w-full">Checkout whit PayPal</Button>
                     </div>
                     
                 </div>
