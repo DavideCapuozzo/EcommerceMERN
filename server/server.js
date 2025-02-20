@@ -8,6 +8,7 @@ const adminProductsRouter = require('./routes/admin/products-routes')
 const shopProductsRouter = require('./routes/shop/products-routes')
 const shopCartRouter = require('./routes/shop/cart-routes')
 const shopAddressRouter = require('./routes/shop/address-routes')
+const shopOrderRouter = require('./routes/shop/order-routes')
 
 const URI_MONGO = process.env.URI_MONGO; // Usa la variabile di ambiente
 
@@ -38,5 +39,6 @@ app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/shop/products', shopProductsRouter);
 app.use('/api/shop/cart', shopCartRouter);
 app.use('/api/shop/address', shopAddressRouter);
+app.use('/api/shop/order', shopOrderRouter);
 
 app.listen(PORT, ()=> console.log(`Server is now running on port ${PORT}`))
