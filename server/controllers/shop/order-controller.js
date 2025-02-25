@@ -109,7 +109,7 @@ const capturePayment = async(req, res)=>{
         res.status(200).json({
             success: true,
             message: 'Order Confirmed',
-            data: order
+            data: order,
         })
 
     }catch (e) {
@@ -121,4 +121,55 @@ const capturePayment = async(req, res)=>{
     }
 }
 
-module.exports = {createOrder, capturePayment}
+const getAllOrdersByUser = async(req, res)=>{
+    try{
+        const{userId} = req.params;
+        const orders = await OrderSchema.find({userId});
+
+        if(!orders.length){
+            return res.status(404).json({
+                success : false,
+                message : 'No orders found!'
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            data: orders
+        })
+
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            success: false,
+            message: 'Error'
+        })
+    }
+}
+
+const getOrderDetails = async(req, res)=>{
+    try{
+        const{id} = req.params;
+        const order = await OrderSchema.findById(id);
+
+        if(!order){
+            return res.status(404).json({
+                success : false,
+                message : 'Order not found!'
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            data: order
+        })
+    }catch(e){
+        console.log(e);
+        res.status(500).json({
+            success: false,
+            message: 'Error'
+        })
+    }
+}
+
+module.exports = {createOrder, capturePayment, getAllOrdersByUser, getOrderDetails}
