@@ -1,10 +1,13 @@
+
+
 const paypal = require('../../helpers/paypal')
 const OrderSchema = require('../../models/Order')
+const Cart = require('../../models/Cart')
 
 const createOrder = async(req, res)=>{
     try{
 
-        const {userId, cartItems, addressInfo, orderStatus, paymentMethod, paymentStatus, totalAmount, orderDate, orderUpdateDate, paymentId, payerId} = req.body;
+        const {userId, cartItems, addressInfo, orderStatus, paymentMethod, paymentStatus, totalAmount, orderDate, orderUpdateDate, paymentId, payerId, cartId} = req.body;
 
         const create_payment_json ={
             intent: 'sale',
@@ -15,7 +18,7 @@ const createOrder = async(req, res)=>{
                 return_url: 'http://localhost:5173/shop/paypal-return',
                 cancel_url: 'http://localhost:5173/shop/paypal-cancel',
             },
-            transaction : [
+            transactions : [
                 {
                     item_list : {
                         items : cartItems.map(item => ({
@@ -39,13 +42,14 @@ const createOrder = async(req, res)=>{
         paypal.payment.create(create_payment_json, async(error, paymentInfo)=>{
             if(error){
                 console.log(error)
-                return resizeTo.status(500).json({
+                return res.status(500).json({
                     success: false,
                     message: 'Error while creating paypal payment'
                 })
             } else{
-                const newlyCreatedOrder = new Order({
-                    userId, 
+                const newlyCreatedOrder = new OrderSchema({
+                    userId,
+                    cartId,
                     cartItems, 
                     addressInfo, 
                     orderStatus, 
@@ -56,6 +60,7 @@ const createOrder = async(req, res)=>{
                     orderUpdateDate, 
                     paymentId, 
                     payerId,
+                    
                 })
 
                 await newlyCreatedOrder.save();
@@ -81,6 +86,31 @@ const createOrder = async(req, res)=>{
 
 const capturePayment = async(req, res)=>{
     try{
+        const {paymentId, payerId, orderId} = req.body
+        let order = await OrderSchema.findById(orderId)
+
+        if(!order){
+            return res.status(404).json({
+                success: false,
+                message: 'Order can not be found'
+            })
+        }
+
+        order.paymentStatus = 'paid';
+        order.orderStatus = 'confirmed';
+        order.paymentId = paymentId;
+        order.payerId = payerId;
+        
+        const getCartId = order.cartId
+        await Cart.findByIdAndDelete(getCartId)
+
+        await order.save()
+
+        res.status(200).json({
+            success: true,
+            message: 'Order Confirmed',
+            data: order
+        })
 
     }catch (e) {
         console.log(e);
