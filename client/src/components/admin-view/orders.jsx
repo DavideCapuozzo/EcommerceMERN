@@ -2,13 +2,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Table, TableHead, TableHeader, TableRow, TableBody, TableCell } from "../ui/table";
 import { Button } from "../ui/button";
 import { Dialog } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminOrderDetailsView from "./order-details";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersForAdmin } from "@/store/admin/order-slice";
 
 
 function AdminOrdersView() {
 
     const [ openDetailsDialog, SetOpenDetailsDialog ] = useState(false)
+    const { orderList, orderDetails } = useSelector(state => state.adminOrder)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllOrdersForAdmin())
+    }, [dispatch])
+
+    console.log(orderList, 'orderLis!!!!!!!!!!!!')
 
     return (
         <Card>
