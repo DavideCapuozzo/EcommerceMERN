@@ -3,17 +3,24 @@ import CommonForm from "../common/form";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import { useSelector } from "react-redux";
+import { updateOrderStatus } from "@/store/admin/order-slice";
+
 
 const initialFormData = {
-    status : ""
+    status: ""
 }
 
-function AdminOrderDetailsView() {
+function AdminOrderDetailsView({ orderDetails }) {
 
-    const [ formData, setFormData ] = useState(initialFormData)
+    const [formData, setFormData] = useState(initialFormData)
+    const {user} = useSelector((state) => state.auth)
 
-    function handleUpdateStatus(event){
+    function handleUpdateStatus(event) {
         event.preventDefault()
+        console.log(formData);
+        const {status} = formData;
+        dispatchEvent(updateOrderStatus({id , orderStatus}))
     }
 
     return (
@@ -38,27 +45,32 @@ function AdminOrderDetailsView() {
                     </div>
                 </div>
                 <Separator></Separator>
-                <div className="grid gap-4 ">
+                <div className="grid gap-4">
                     <div className="grid gap-2">
                         <div className="font-medium">Order Details</div>
-                        <ul className="grid gap-3 ">
-                            <li className="flex items-center justify-between">
-                                <span>Product One</span>
-                                <span>100$</span>
-                            </li>
+                        <ul className="grid gap-3">
+                            {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
+                                ? orderDetails?.cartItems.map((item) => (
+                                    <li className="flex items-center justify-between">
+                                        <span>Title: {item.title}</span>
+                                        <span>Quantity: {item.quantity}</span>
+                                        <span>Price: ${item.price}</span>
+                                    </li>
+                                ))
+                                : null}
                         </ul>
                     </div>
                 </div>
                 <div className="grid gap-4 ">
                     <div className="grid gap-2">
                         <div className="font-medium">Shipping Info</div>
-                        <div className="gird gap-0.5 text-muted-foreground">
-                            <span>Jhon Doe</span>
-                            <span>Address</span>
-                            <span>City</span>
-                            <span>Pincode</span>
-                            <span>Phone</span>
-                            <span>Notes</span>
+                        <div className="flex flex-col text-muted-foreground">
+                            <span>{user.userName}</span>
+                            <span>{orderDetails?.addressInfo?.address}</span>
+                            <span>{orderDetails?.addressInfo?.city}</span>
+                            <span>{orderDetails?.addressInfo?.pincode}</span>
+                            <span>{orderDetails?.addressInfo?.phone}</span>
+                            <span>{orderDetails?.addressInfo?.notes}</span>
                         </div>
                     </div>
                 </div>
@@ -77,10 +89,10 @@ function AdminOrderDetailsView() {
                             ]
                         },
                     ]}
-                    formData={formData}
-                    setFormData={setFormData}
-                    buttonText={'Update order Status'}
-                    onSubmit={handleUpdateStatus}
+                        formData={formData}
+                        setFormData={setFormData}
+                        buttonText={'Update order Status'}
+                        onSubmit={handleUpdateStatus}
                     ></CommonForm>
                 </div>
             </div>
