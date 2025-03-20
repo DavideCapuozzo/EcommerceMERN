@@ -3,8 +3,10 @@ import CommonForm from "../common/form";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
-import { useSelector } from "react-redux";
-import { updateOrderStatus } from "@/store/admin/order-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersForAdmin, getOrderDetailsForAdmin, updateOrderStatus } from "@/store/admin/order-slice";
+import { Badge } from "../ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 
 const initialFormData = {
@@ -14,35 +16,70 @@ const initialFormData = {
 function AdminOrderDetailsView({ orderDetails }) {
 
     const [formData, setFormData] = useState(initialFormData)
-    const {user} = useSelector((state) => state.auth)
+    const { user } = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
+    const { toast } = useToast()
 
     function handleUpdateStatus(event) {
         event.preventDefault()
         console.log(formData);
-        const {status} = formData;
-        dispatchEvent(updateOrderStatus({id , orderStatus}))
+        const { status } = formData;
+        dispatch(updateOrderStatus({ id: orderDetails?._id, orderStatus: status })).then(data => {
+            console.log(data, '123');
+            if (data?.payload?.success) {
+                dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+                dispatch(getAllOrdersForAdmin());
+                setFormData(initialFormData);
+                toast({
+                    title: data?.payload?.message,
+                })
+            }
+        })
     }
 
     return (
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
             <div className="grid gap-6 ">
                 <div className="grid gap-2">
                     <div className="flex mt-10 items-center justify-between">
                         <p className="font-medium">Order Id</p>
-                        <Label>123456</Label>
+                        <Label>{orderDetails?._id}</Label>
                     </div>
                     <div className="flex mt-2 items-center justify-between">
                         <p className="font-medium">Order Date</p>
-                        <Label>12/34/56</Label>
+                        <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
                     </div>
-                    <div className="flex mt-2 items-center justify-between">
-                        <p className="font-medium">Order Status</p>
-                        <Label>Processing</Label>
-                    </div>
+
                     <div className="flex mt-2 items-center justify-between">
                         <p className="font-medium">Price</p>
-                        <Label>$500</Label>
+                        <Label>${orderDetails?.totalAmount}</Label>
                     </div>
+                    <div className="flex mt-2 items-center justify-between">
+                        <p className="font-medium">Payment method</p>
+                        <Label>{orderDetails?.paymentMethod}</Label>
+                    </div>
+                    <div className="flex mt-2 items-center justify-between">
+                        <p className="font-medium">Payment Status</p>
+                        <Label>{orderDetails?.paymentStatus}</Label>
+                    </div>
+
+                    <div className="flex mt-2 items-center justify-between">
+                        <p className="font-medium">Order Status</p>
+                        <Label>
+                            <Badge
+                                className={`py-1 px-3 ${orderDetails?.orderStatus === "confirmed"
+                                        ? "bg-green-500"
+                                        : orderDetails?.orderStatus === "rejected"
+                                            ? "bg-red-600"
+                                            : "bg-black"
+                                    }`}
+                            >
+                                {orderDetails?.orderStatus}
+                            </Badge>
+                        </Label>
+                    </div>
+
+
                 </div>
                 <Separator></Separator>
                 <div className="grid gap-4">

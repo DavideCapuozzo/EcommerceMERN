@@ -39,17 +39,17 @@ function ShoppingOrderDetailsView({ orderDetails }) {
                         <Label>
                             <Badge
                                 className={`py-1 px-3 ${orderDetails?.orderStatus === "confirmed"
-                                        ? "bg-green-500"
-                                        : orderDetails?.orderStatus === "rejected"
-                                            ? "bg-red-600"
-                                            : "bg-black"
+                                    ? "bg-green-500"
+                                    : orderDetails?.orderStatus === "rejected"
+                                        ? "bg-red-600"
+                                        : "bg-black"
                                     }`}
                             >
                                 {orderDetails?.orderStatus}
                             </Badge>
                         </Label>
                     </div>
-                    
+
                 </div>
                 <Separator></Separator>
                 <div className="grid gap-4">
@@ -72,12 +72,12 @@ function ShoppingOrderDetailsView({ orderDetails }) {
                     <div className="grid gap-2">
                         <div className="font-medium">Shipping Info</div>
                         <div className="flex flex-col text-muted-foreground">
-                        <span>{user.userName}</span>
-                        <span>{orderDetails?.addressInfo?.address}</span>
-                        <span>{orderDetails?.addressInfo?.city}</span>
-                        <span>{orderDetails?.addressInfo?.pincode}</span>
-                        <span>{orderDetails?.addressInfo?.phone}</span>
-                        <span>{orderDetails?.addressInfo?.notes}</span>
+                            <span>{user.userName}</span>
+                            <span>{orderDetails?.addressInfo?.address}</span>
+                            <span>{orderDetails?.addressInfo?.city}</span>
+                            <span>{orderDetails?.addressInfo?.pincode}</span>
+                            <span>{orderDetails?.addressInfo?.phone}</span>
+                            <span>{orderDetails?.addressInfo?.notes}</span>
                         </div>
                     </div>
                 </div>
