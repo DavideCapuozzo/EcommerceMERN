@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-  } from "@/components/ui/dialog"
+} from "@/components/ui/dialog"
 import { Button } from "../ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -15,38 +15,56 @@ import { useDispatch, useSelector } from "react-redux"
 import { setProductDetails } from "@/store/shop/products-slice"
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice"
-  
 
-function ProductDetailsDialog({open, setOpen, productDetails}) {
+
+function ProductDetailsDialog({ open, setOpen, productDetails }) {
 
     const dispatch = useDispatch()
-    const {user} = useSelector(state => state.auth)
-    const {toast} = useToast()
+    const { user } = useSelector(state => state.auth)
+    const { cartItems } = useSelector(state => state.shopCart);
+    const { toast } = useToast()
 
-    function handleAddToCart(getCurrentProductId){
+    function handleAddToCart(getCurrentProductId, getTotalStock) {
+        let getCartItems = cartItems.items || [];
+        if (getCartItems.length) {
+            const indexOfCurrentItem = getCartItems.findIndex(item => item.productId === getCurrentProductId);
+            if (indexOfCurrentItem > -1) {
+                const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+                if (getQuantity + 1 > getTotalStock) {
+                    toast({
+                        title: `Only ${getQuantity} quantity can be added for this item`,
+                        variant: 'destructive'
+                    })
+
+                    return;
+                }
+            }
+
+
+        }
         console.log(getCurrentProductId, "getCurrentProductId")
-        dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data=> {
-            if(data?.payload?.success){
+        dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 })).then(data => {
+            if (data?.payload?.success) {
                 dispatch(fetchCartItems(user?.id))
                 toast({
                     title: "Product is added to Cart",
                 })
             }
         })
-        
+
     }
 
-    function handleDialogClose(){
+    function handleDialogClose() {
         setOpen(false)
         dispatch(setProductDetails())
     }
 
 
-    return(
+    return (
         <Dialog open={open} onOpenChange={handleDialogClose}>
             <DialogContent className="grid  grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
                 <div className="relative overflow-hidden rounded-lg">
-                    <img src={productDetails?.image} alt={productDetails?.title} width={600} height={600} className="aspect-square w-full object-cover"/>
+                    <img src={productDetails?.image} alt={productDetails?.title} width={600} height={600} className="aspect-square w-full object-cover" />
                 </div>
                 <div className="">
                     <div>
@@ -69,10 +87,12 @@ function ProductDetailsDialog({open, setOpen, productDetails}) {
                         </div>
                         <span className="text-muted-foreground">(4.5)</span>
                     </div>
-                    
+
                     <div className="mt-5 mb-5">
-                        <Button className="w-full" onClick={()=> handleAddToCart(productDetails?._id)}>Add to Cart</Button>
-                        
+                        {
+                            productDetails?.totalStock === 0 ? <Button className="w-full opacity-60 cursor-not-allowed" >Out of Stock</Button> : <Button className="w-full" onClick={() => handleAddToCart(productDetails?._id, productDetails?.totalStock)}>Add to Cart</Button>
+                        }
+
                     </div>
                     <Separator></Separator>
                     <div className="max-h-[300px] overflow-auto">
@@ -122,14 +142,14 @@ function ProductDetailsDialog({open, setOpen, productDetails}) {
                             <Button>Submit</Button>
                         </div>
                     </div>
-                    
+
                 </div>
                 <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                    This action cannot be undone. This will permanently delete your account
-                    and remove your data from our servers.
-                </DialogDescription>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        and remove your data from our servers.
+                    </DialogDescription>
                 </DialogHeader>
             </DialogContent>
         </Dialog>
