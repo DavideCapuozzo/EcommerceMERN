@@ -157,3 +157,4 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 }
 
 export default ProductDetailsDialog
+
