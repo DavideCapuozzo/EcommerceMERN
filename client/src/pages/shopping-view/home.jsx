@@ -14,99 +14,104 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice"
 import ProductDetailsDialog from '@/components/shopping-view/product-detail'
+import { getFeatureImages } from '@/store/common-slice'
 
 const categoriesWithIcon = [
-    { id: "men", label: "Men", icon : ShirtIcon },
-    { id: "women", label: "Women", icon : CloudLightning },
-    { id: "kids", label: "Kids", icon : BabyIcon },
-    { id: "accessories", label: "Accessories", icon : WatchIcon  },
-    { id: "footwear", label: "Footwear", icon : UmbrellaIcon  },
+    { id: "men", label: "Men", icon: ShirtIcon },
+    { id: "women", label: "Women", icon: CloudLightning },
+    { id: "kids", label: "Kids", icon: BabyIcon },
+    { id: "accessories", label: "Accessories", icon: WatchIcon },
+    { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
 ]
 
 const brandWithIcon = [
-    { id: "nike", label: "Nike", icon : ShirtIcon },
-    { id: "adidas", label: "Adidas", icon : WashingMachine },
-    { id: "puma", label: "Puma", icon : Radiation },
-    { id: "levi", label: "Levi's", icon : Toilet},
-    { id: "zara", label: "Zara", icon : MountainSnow },
-    { id: "h&m", label: "H&M", icon : Blend },
+    { id: "nike", label: "Nike", icon: ShirtIcon },
+    { id: "adidas", label: "Adidas", icon: WashingMachine },
+    { id: "puma", label: "Puma", icon: Radiation },
+    { id: "levi", label: "Levi's", icon: Toilet },
+    { id: "zara", label: "Zara", icon: MountainSnow },
+    { id: "h&m", label: "H&M", icon: Blend },
 ]
 
-function ShoppingHome(){
+function ShoppingHome() {
 
     const [currentSlide, setCurrentSlide] = useState(0)
-    const {productList, productDetails} = useSelector(state => state.shopProducts)
-    const {user} = useSelector(state => state.auth)
-    const [ openDetailsDialog, setOpenDetailsDialog ] = useState(false);
+    const { productList, productDetails } = useSelector(state => state.shopProducts)
+    const { featureImageList } = useSelector((state) => state.commonFeature);
+    const { user } = useSelector(state => state.auth)
+    const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {toast} = useToast()
+    const { toast } = useToast()
 
-    const slides = [bannerOne, bannerTwo, bannerThree]
 
-    function handleNavigateToListingPage(getCurrentItem, section){
+    function handleNavigateToListingPage(getCurrentItem, section) {
         sessionStorage.removeItem('filters');
         const currentFilter = {
-            [section] : [getCurrentItem.id]
+            [section]: [getCurrentItem.id]
         }
 
         sessionStorage.setItem('filters', JSON.stringify(currentFilter))
         navigate(`/shop/listing`)
     }
 
-    function handleGetProductDetails(getCurrentProductId){
+    function handleGetProductDetails(getCurrentProductId) {
         dispatch(fetchProductDetails(getCurrentProductId))
     }
 
-    function handleAddToCart(getCurrentProductId){
+    function handleAddToCart(getCurrentProductId) {
         console.log(getCurrentProductId, "getCurrentProductId")
-        dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data=> {
-            if(data?.payload?.success){
+        dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 })).then(data => {
+            if (data?.payload?.success) {
                 dispatch(fetchCartItems(user?.id))
                 toast({
                     title: "Product is added to Cart",
                 })
             }
         })
-        
+
     }
 
     useEffect(() => {
-        if(productDetails !== null) setOpenDetailsDialog(true)
-    },[productDetails])
+        if (productDetails !== null) setOpenDetailsDialog(true)
+    }, [productDetails])
 
     useEffect(() => {
-        const timer =setInterval(() => {
-            setCurrentSlide(prevSlide => (prevSlide + 1) % slides.length)
+        const timer = setInterval(() => {
+            setCurrentSlide(prevSlide => (prevSlide + 1) % featureImageList.length)
         }, 5000)
 
         return () => clearInterval(timer)
 
-    }, [])
+    }, [featureImageList])
 
-    useEffect(()=>{
-        dispatch(fetchAllFilteredProducts({filterParams : {}, sortParams: 'price-lowtohigh'}))
+    useEffect(() => {
+        dispatch(fetchAllFilteredProducts({ filterParams: {}, sortParams: 'price-lowtohigh' }))
     }, dispatch)
-    
+
     console.log(productList, 'HOME PAGE')
 
-    return(
+    useEffect(() => {
+        dispatch(getFeatureImages());
+    }, [dispatch]);
+
+    return (
         <div className="flex flex-col min-h-screen">
             <div className="relative w-full h-[600px] overflow-hidden">
                 {
-                    slides.map((slide, index) => (
+                    featureImageList && featureImageList.length > 0 ? featureImageList.map((slide, index) => (
                         <img
-                            src={slide}
+                            src={slide?.image}
                             key={index}
                             className={`${index === currentSlide ? 'opacity-100' : 'opacity-0'} absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
                         >
                         </img>
                     ))
-                }
-                <Button onClick={()=>setCurrentSlide(prevSlide => (prevSlide -1 + slides.length) % slides.length)} variant='outline' size='icon' className='absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80'>
+                : null}
+                <Button onClick={() => setCurrentSlide(prevSlide => (prevSlide - 1 + featureImageList.length) % featureImageList.length)} variant='outline' size='icon' className='absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80'>
                     <ChevronLeftIcon className='w-4 h-4'></ChevronLeftIcon>
                 </Button>
-                <Button onClick={()=>setCurrentSlide(prevSlide => (prevSlide + 1) % slides.length)} variant='outline' size='icon' className='absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80'>
+                <Button onClick={() => setCurrentSlide(prevSlide => (prevSlide + 1) % featureImageList.length)} variant='outline' size='icon' className='absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80'>
                     <ChevronRightIcon className='w-4 h-4'></ChevronRightIcon>
                 </Button>
             </div>
@@ -149,9 +154,9 @@ function ShoppingHome(){
                     <h2 className='text-3xl font-bold text-center mb-8'>Feature Products</h2>
                     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                         {
-                            productList && productList.length > 0 ? 
-                            productList.map(productItem => <ShoppingProductTile handleGetProductDetails={handleGetProductDetails} handleAddToCart={handleAddToCart} product={productItem}></ShoppingProductTile>)
-                            : null
+                            productList && productList.length > 0 ?
+                                productList.map(productItem => <ShoppingProductTile handleGetProductDetails={handleGetProductDetails} handleAddToCart={handleAddToCart} product={productItem}></ShoppingProductTile>)
+                                : null
                         }
                     </div>
                 </div>
