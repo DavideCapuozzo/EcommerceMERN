@@ -10,7 +10,7 @@ const initialState ={
 
 
 export const addNewProduct = createAsyncThunk('/products/addnewproduct', async(FormData) => {
-    const result = await axios.post('http://localhost:5000/api/admin/products/add', FormData, {
+    const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/admin/products/add`, FormData, {
         headers: {
             "Content-Type": "application/json",
         }
@@ -22,7 +22,7 @@ export const addNewProduct = createAsyncThunk('/products/addnewproduct', async(F
 export const fetchAllProducts = createAsyncThunk('/products/fetchAllProducts', async() => {
     console.log('fetchAllProducts is being called...');
     try{
-        const result = await axios.get('http://localhost:5000/api/admin/products/get');
+        const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/products/get`);
         console.log(result?.data, "CHIAMATA API FETCHALLPRODUCTS")
         return result?.data
 
@@ -37,10 +37,10 @@ export const fetchAllProducts = createAsyncThunk('/products/fetchAllProducts', a
 
 export const editProduct = createAsyncThunk('/products/editProduct', async ({ id, formData }) => {
     console.log("##########################");
-    console.log("Generated URL:", `http://localhost:5000/api/admin/products/edit/${id}`);
+    console.log("Generated URL:", `${import.meta.env.VITE_API_URL}/api/admin/products/edit/${id}`);
     console.log("##########################");
 
-    const result = await axios.put(`http://localhost:5000/api/admin/products/edit/${id}`, formData, {
+    const result = await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/products/edit/${id}`, formData, {
         headers: {
             "Content-Type": "application/json",
         },
@@ -54,7 +54,7 @@ export const editProduct = createAsyncThunk('/products/editProduct', async ({ id
 
 
 export const deleteProduct = createAsyncThunk('/products/deleteProduct', async(id) => {
-    const result = await axios.delete(`http://localhost:5000/api/admin/products/delete/${id}`)
+    const result = await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/products/delete/${id}`)
 
     return result?.data
 })

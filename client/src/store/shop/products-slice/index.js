@@ -14,7 +14,7 @@ export const fetchAllFilteredProducts = createAsyncThunk('/products/fetchAllProd
             ...filterParams, 
             sortBy : sortParams
         })
-        const result = await axios.get(`http://localhost:5000/api/shop/products/get?${query}`);
+        const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/shop/products/get?${query}`);
         console.log(result?.data, "CHIAMATA API FETCHALLPRODUCTS")
         return result?.data
 
@@ -30,7 +30,7 @@ export const fetchAllFilteredProducts = createAsyncThunk('/products/fetchAllProd
 export const fetchProductDetails = createAsyncThunk('/products/fetchProductDetails', async(id) => {
     try{
 
-        const result = await axios.get(`http://localhost:5000/api/shop/products/get/${id}`);
+        const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/shop/products/get/${id}`);
         return result?.data
 
     }catch (error){
