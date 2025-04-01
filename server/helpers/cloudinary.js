@@ -3,9 +3,9 @@ const multer = require('multer');
 const { handleImageUpload } = require('../controllers/admin/products-controller');
 
 cloudinary.config({
-    cloud_name: 'divuubyft',
-    api_key: '964312817173256',
-    api_secret: 'zx-z5-JuvK4Gw5qelxh8jjkZBSw'
+    cloud_name: process.env.CLOUDINARY_CLOUDE_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 const storage = new multer.memoryStorage();
